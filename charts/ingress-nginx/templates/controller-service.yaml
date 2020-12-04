@@ -1,4 +1,5 @@
 {{- if .Values.controller.service.enabled -}}
+{{- $servicePath := include "ingress-nginx.controller.publishServicePath" . -}}
 apiVersion: v1
 kind: Service
 metadata:
@@ -12,7 +13,7 @@ metadata:
   {{- if .Values.controller.service.labels }}
     {{- toYaml .Values.controller.service.labels | nindent 4 }}
   {{- end }}
-  name: {{ include "ingress-nginx.controller.fullname" . }}
+  name: {{ (split "/" $servicePath )._1 }}
 spec:
   type: {{ .Values.controller.service.type }}
 {{- if .Values.controller.service.clusterIP }}
